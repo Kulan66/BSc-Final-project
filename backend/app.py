@@ -304,7 +304,7 @@ def insurance_chat():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# NEW: Endpoint to get product list for chat context
+# NEW: Endpoint to get product list for chat context.
 @app.route('/chat-products', methods=['GET'])
 def get_chat_products():
     try:
