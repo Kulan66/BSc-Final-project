@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Loader2 } from "lucide-react";
 import BookingModal from "./BookingModal";
-import ChatInterface from "./ChatInterface";
+
 import { useGetProductsQuery, useGetCompaniesQuery, useGetClassesQuery } from "@/lib/api";
 import ProductCard from "./ProductCard";
 import CompanyTab from "./CompanyTab";
@@ -143,8 +143,7 @@ export default function ProductsList({ coverageLevel }) {
         </AnimatePresence>
       </section>
 
-      {/* Add Chat Interface below Products List */}
-      <ChatInterface />
+      
     </>
   );
 }

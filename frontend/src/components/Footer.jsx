@@ -3,7 +3,7 @@ import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from "react-icons/fa";
 
 export default function AdvancedFooter() {
   return (
-    <footer className="w-full bg-gray-900 text-gray-200 py-12 mt-16">
+    <footer className="w-full bg-gray-900 text-gray-200 py-12">
       <div className="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-8">
         {/* Company Info Section */}
         <div className="flex flex-col gap-4">

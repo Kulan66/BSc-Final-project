@@ -27,7 +27,7 @@ export default function Hero() {
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="#quote-form">
               <button className="bg-blue-600 hover:bg-blue-700 transition-colors px-6 py-3 text-lg font-semibold rounded-md text-white">
-                Get a Free Quote
+                Get a predict
               </button>
             </a>
             <a href="/products">

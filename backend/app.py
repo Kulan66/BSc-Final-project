@@ -178,40 +178,85 @@ def handle_products():
             conn.commit()
             cursor.close()
             conn.close()
-            return jsonify({'message': 'Product created successfully'}), 201
+            return jsonify({'message': 'Product created successfully'}), 200
         except Exception as e:
             return jsonify({'error': str(e)}), 500
 
-# Updated route to handle bookings with user_email
-@app.route('/bookings', methods=['POST'])
-def create_booking():
-    try:
-        booking_data = request.get_json()
-        user_email = booking_data.get('userEmail')
-        product_id = booking_data.get('productId')
+@app.route('/bookings', methods=['GET', 'POST'])
+def handle_bookings():
+    if request.method == 'GET':
+        try:
+            conn = get_db_connection()
+            cursor = conn.cursor(dictionary=True)
+            
+            # SQL query to get all bookings with product and company details
+            query = """
+                SELECT 
+                    b.id,
+                    b.user_email,
+                    b.booking_date,
+                    p.name AS product_name,
+                    c.name AS company_name
+                FROM 
+                    bookings b
+                JOIN 
+                    products p ON b.product_id = p.id
+                JOIN 
+                    companies c ON p.company_id = c.id
+                ORDER BY 
+                    b.booking_date DESC
+            """
+            cursor.execute(query)
+            bookings = cursor.fetchall()
+            cursor.close()
+            conn.close()
+            
+            return jsonify({'bookings': bookings})
+        except Exception as e:
+            # This will return a 500 error if the database connection fails,
+            # which the frontend can handle gracefully.
+            return jsonify({'error': str(e)}), 500
+    
+    elif request.method == 'POST':
+        try:
+            booking_data = request.get_json()
+            user_email = booking_data.get('userEmail')
+            product_id = booking_data.get('productId')
 
-        if not user_email or not product_id:
-            return jsonify({'error': 'userEmail and productId are required'}), 400
-        
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        query = "INSERT INTO bookings (user_email, product_id) VALUES (%s, %s)"
-        params = (user_email, product_id)
-        cursor.execute(query, params)
-        conn.commit()
-        cursor.close()
-        conn.close()
+            if not user_email or not product_id:
+                return jsonify({'error': 'userEmail and productId are required'}), 400
+            
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            query = "INSERT INTO bookings (user_email, product_id) VALUES (%s, %s)"
+            params = (user_email, product_id)
+            cursor.execute(query, params)
+            conn.commit()
+            cursor.close()
+            conn.close()
 
-        return jsonify({'message': 'Booking created successfully'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+            return jsonify({'message': 'Booking created successfully'}), 200
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
 
 @app.route('/companies', methods=['GET'])
 def get_companies():
     try:
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT id, name FROM companies")
+        search_query = request.args.get('search')
+        
+        # Add this line to see the search query
+        print(f"Received search query: '{search_query}'") 
+        
+        query = "SELECT id, name FROM companies"
+        params = []
+        
+        if search_query:
+            query += " WHERE name LIKE %s"
+            params.append(f"%{search_query}%")
+            
+        cursor.execute(query, params)
         companies = cursor.fetchall()
         cursor.close()
         conn.close()

@@ -12,10 +12,15 @@ import ProtectedLayout from "./layouts/ProtectedLayout";
 import AdminProtectedLayout from "./layouts/AdminProtectedLayout";
 
 import HomePage from "./pages/Home.page";
+import ChatPage from "./pages/ChatPage";
+import ProductsPage from "./pages/Products.page";
+import ClassPage from "./pages/Class.page";
+import CompaniesPage from "./pages/Companies.page";
 import AccountPage from "./pages/Account.page";
 import SignInPage from "./pages/SignIn.page";
 import SignUpPage from "./pages/SignUp.page";
 import CreateInsurancePage from "./pages/CreateInsurance.page";
+import BookingsPage from "./pages/Bookings.page";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -32,10 +37,15 @@ createRoot(document.getElementById("root")).render(
             <Route element={<RootLayout />}>
               <Route element={<MainLayout />}>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/products" element={<ProductsPage />} />
+                <Route path="/class" element={<ClassPage />} />
+                <Route path="/companies" element={<CompaniesPage />} />
+                <Route path="/chat" element={<ChatPage />} />
                 <Route element={<ProtectedLayout />}>
                   <Route path="/account" element={<AccountPage />} />
                   <Route element={<AdminProtectedLayout />}>
                     <Route path="/insurance/create" element={<CreateInsurancePage />} />
+                    <Route path="/bookings" element={<BookingsPage />} />
                   </Route>
                 </Route>
               </Route>
